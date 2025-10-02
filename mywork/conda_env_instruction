@@ -1,0 +1,32 @@
+How to install mpi-enabled h5py:
+Mehtod 1 - this one crashed at running because of mixed libaries of conda env and sys. Use method 2
+1. load system MPI and HDF5
+    module use /contrib/spack-stack/spack-stack-1.9.1/envs/ue-oneapi-2024.2.1/install/modulefiles/Core/
+    module load stack-oneapi/2024.2.1 
+    module load intel-oneapi-compilers/2024.2.1   
+    module load intel-oneapi-mpi/2021.13.1
+    module load hdf5/1.14.3
+2. install mpi4py
+   export MPICC=$(command -v mpicc)
+   python -m pip install --no-binary=mpi4py mpi4py
+
+3. install h5py
+   check hdf5 path:  
+     pkg-config --variable=prefix hdf5 || true
+     pkg-config --libs hdf5 || true
+
+   #Set env variables
+   export CC=$(command -v mpicc)
+   export HDF5_MPI=ON
+   export HDF5_DIR=/apps/spack-2024-12/linux-rocky9-x86_64/oneapi-2024.2.1/hdf5-1.14.3-ns2heewvz3fc7jzs54bcjqhsibgjbzjc 
+   python -m pip install --no-binary=h5py h5py
+
+4. Verify
+In [1]: import h5py
+
+In [2]: h5py.get_config().mpi
+Out[2]: True
+
+
+Method 2 - use conda to install mpi4py and h5py
+    conda install -c conda-forge compilers openmpi ucx mpi4py "hdf5=*=mpi*" "h5py=*=mpi*"

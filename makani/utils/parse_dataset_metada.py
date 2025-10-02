@@ -27,9 +27,6 @@ def parse_dataset_metadata(metadata_json_path, params):
         params["h5_path"] = metadata["h5_path"]
         params["dhours"] = metadata["dhours"]
 
-        # load excluded list of timestamps if available
-        params["analysis_epoch_start_dates"] = metadata.get("analysis_epoch_start_dates", [])
-
         # read grid information: if not present, assume equiangular
         if ("lat" in metadata["coords"]) and ("lon" in metadata["coords"]):
             params["lat"] = metadata["coords"]["lat"]
@@ -62,8 +59,9 @@ def parse_dataset_metadata(metadata_json_path, params):
         # remember the channel names within the dataset if needed later
         params["data_channel_names"] = channel_names
 
-        # get other metadata:
-        params["dataset"] = dict(name=metadata["dataset_name"], description=metadata["attrs"]["description"], metadata_file=params["metadata_json_path"])
+        #lcui
+        ## get other metadata:
+        #params["dataset"] = dict(name=metadata["dataset_name"], description=metadata["attrs"]["description"], metadata_file=params["metadata_json_path"])
 
     except Exception as e:
         raise
